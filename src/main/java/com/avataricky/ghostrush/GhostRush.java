@@ -1,11 +1,21 @@
-package com.example.examplemod;
+package com.avataricky.ghostrush;
 
+import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item.Properties;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -13,19 +23,22 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.stream.Collectors;
-
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod("examplemod")
-public class ExampleMod
+@Mod("ghostrush")
+public class GhostRush
 {
-    // Directly reference a log4j logger.
+	//private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
+
+	//public static final RegistryObject<Block> Plasma_BLOCK = BLOCKS.register("plasma", () -> new Block(Block.Properties.create(Material.AIR))); // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public ExampleMod() {
+    public GhostRush() {
+    	
+    	//Block Plasma = new Block(AbstractBlock.Properties.of(Material.AIR).noCollission());
+    	
+    	//BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the enqueueIMC method for modloading
@@ -39,6 +52,13 @@ public class ExampleMod
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    @SubscribeEvent
+    public void registerBlocks(RegistryEvent.Register<Block> event) {
+    	Block plasma = new Block(AbstractBlock.Properties.of(Material.STONE).noCollission());
+    	BlockItem plasmaItem = new BlockItem(plasma, null);
+    	plasmaItem.setRegistryName(plasma.getRegistryName());
+    	event.getRegistry().registerAll(plasma);
+    }
     private void setup(final FMLCommonSetupEvent event)
     {
         // some preinit code
